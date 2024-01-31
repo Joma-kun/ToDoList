@@ -5,12 +5,21 @@ function ToDoList() {
     const [todo, setTodo] = useState("")
     const [completedTodos, setCompletedTodos] = useState([])
 
-    //todoが空文字列でない場合，新しくタスクを追加
+    //タスクを追加する
     function handlePush() {
+        ////todoが空文字列でない場合，新しくタスクを追加．その後入力欄を初期化
         if (todo !== "") {
             setTodos(todos.concat([todo]))
             setTodo("")
         }
+    }
+
+    //タスクを未完から完了にする
+    function handleComplete(index) {
+        //index番のタスクを完了に追加
+        setCompletedTodos(completedTodos.concat(todos[index]))
+        //index番以外のタスクをスライスし，それらを未完に追加(更新)
+        setTodos(todos.slice(0, index).concat(todos.slice(index + 1)))
     }
 
     return (
@@ -34,7 +43,12 @@ function ToDoList() {
             <h3>未完</h3>
             <ul>
                 {todos.map((todo, index) => (
-                    <li key={index}>{todo}</li>
+                    <li key={index}>
+                        {todo}
+
+                        {/* ボタン押下でhandleCompleteを実行 */}
+                        <button onClick={() => handleComplete(index)}>完了する</button>
+                    </li>
                 ))}
             </ul>
         </div>
