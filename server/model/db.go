@@ -12,15 +12,21 @@ import (
 
 var db *gorm.DB
 
-// DB接続とテーブルを作成する
+// DB接続とテーブルを作成
 func DBConnection() *sql.DB {
 	dsn := GetDBConfig()
 	var err error
+
+	// dsnを用いてDBに接続し，戻り値をdb, errに代入
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(fmt.Errorf("DB Error: %w", err))
 	}
+
+	// テーブル(Task型)を作成
 	CreateTable(db)
+
+	// *gorm.DB型を*sql.DB型に変換
 	sqlDB, err := db.DB()
 	if err != nil {
 		panic(fmt.Errorf("DB Error: %w", err))
@@ -28,7 +34,7 @@ func DBConnection() *sql.DB {
 	return sqlDB
 }
 
-// DBのdsnを取得する
+// DBのdsnを取得
 func GetDBConfig() string {
 	user := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
@@ -36,11 +42,13 @@ func GetDBConfig() string {
 	port := os.Getenv("DB_PORT")
 	dbname := os.Getenv("DB_DBNAME")
 
+	// dsn(DBの接続情報につける識別子)を定義
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, password, hostname, port, dbname) + "?charset=utf8mb4&parseTime=True&loc=Local"
 	return dsn
 }
 
-// Task型のテーブルを作成する
+// テーブルを作成
 func CreateTable(db *gorm.DB) {
+	// Task型のテーブルを作成
 	db.AutoMigrate(&Task{})
 }

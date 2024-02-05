@@ -5,23 +5,23 @@ import (
 	_ "gorm.io/gorm"
 )
 
-// Task型はuuid.UUID型のID、文字列のNameとbool値のFinishedをパラメーターとして持つ
+// Task型の定義
 type Task struct {
 	ID       uuid.UUID
 	Name     string
 	Finished bool
 }
 
-// 関数GetTasksは、引数はなく、戻り値は[]Task型（Task型のスライス）とerror型である
+// 	DBからtask一覧を取得する
 func GetTasks() ([]Task, error) {
 
-	// 空のタスクのスライスである、tasksを定義する
+	// tasksを空のタスクのスライスで定義
 	var tasks []Task
 
-	// tasksにDBのタスク全てを代入する。その操作の成否をerrと定義する
+	// tasksにDBのタスク全てを代入．その操作の成否をerrと定義
+	// GORMではdb.Find()の検索結果を引数に直接代入することに注意
 	err := db.Find(&tasks).Error
 
-	// tasksとerrを返す
 	return tasks, err
 }
 

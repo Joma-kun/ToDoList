@@ -9,13 +9,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// 関数 GetTasksHandlerは引数がecho.Context型のc で、戻り値はerror型である
+// Task一覧をjsonで返す
 func GetTasksHandler(c echo.Context) error {
 
-	// model(package)の関数GetTasksを実行し、戻り値をtasks,errと定義する。
+	// modelの関数GetTasksを実行
 	tasks, err := model.GetTasks()
 
-	// errが空でない時は StatusBadRequestを返す
+	// errが空でない時(err発生時)は StatusBadRequestを返す
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
 	}
