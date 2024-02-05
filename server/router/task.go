@@ -28,26 +28,24 @@ type ReqTask struct {
 	Name string `json:"name"`
 }
 
-// 関数 AddTaskHandler は引数がecho.Context型で、戻り値はerror型である
+// 追加したtaskをjsonで返す
 func AddTaskHandler(c echo.Context) error {
 
-	// 空のReqTaskである、reqを定義
+	// 空のReqTaskであるreqを定義
 	var req ReqTask
 
 	// bodyのjsonファイルをbind
+	// bind: DBやHTTPリクエストのデータをGoの構造体(今回はreq)に対応付け
 	err := c.Bind(&req)
-	// エラーハンドリング
-	// StatusBadRequestを返す
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
 	}
 
-	// 空のmodel(package)のTaskである、taskを定義
+	// taskを空のモデルのTaskで定義
 	var task *model.Task
 
-	// model(package)のAddTask関数を実行し、戻り値をtask,errと定義
+	// modelのAddTask関数を実行
 	task, err = model.AddTask(req.Name)
-	// エラーハンドリング
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
 	}
@@ -56,15 +54,16 @@ func AddTaskHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, task)
 }
 
+// taskの完了状態を変更する関数を呼び出す
 func ChangeFinishedTaskHandler(c echo.Context) error {
 
-	// taskIDのパスパラメータ(string型)を取得し、uuid型に変換。その値をtaskID、成否をerrとする
+	// taskIDのパスパラメータ(string型)を取得し，uuid型に変換
 	taskID, err := uuid.Parse(c.Param("taskID"))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
 	}
 
-	// 関数 ChangeFinishedTaskを実行、戻り値をerrに代入する(errを更新した)
+	// modelのChangeFinishedTaskを実行
 	err = model.ChangeFinishedTask(taskID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
@@ -72,11 +71,16 @@ func ChangeFinishedTaskHandler(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+// taskを削除する関数を呼び出す
 func DeleteTaskHandler(c echo.Context) error {
+
+	// taskIDのパスパラメータ(string型)を取得し，uuid型に変換
 	taskID, err := uuid.Parse(c.Param("taskID"))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
 	}
+
+	// modelのDeleteTaskを実行
 	err = model.DeleteTask(taskID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")

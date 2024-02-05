@@ -25,10 +25,10 @@ func GetTasks() ([]Task, error) {
 	return tasks, err
 }
 
-// 関数 AddTask は引数がstring型のnameで、戻り値はTaskのポインターとerror型である
+// DBにtaskを追加
 func AddTask(name string) (*Task, error) {
 
-	// 新たなuuidを生成し、これをid、成否をerrとする（*2）
+	// 新たなuuidを生成
 	id, err := uuid.NewUUID()
 	if err != nil {
 		return nil, err
@@ -41,23 +41,25 @@ func AddTask(name string) (*Task, error) {
 		Finished: false,
 	}
 
-	// taskをDBのTaskテーブルに追加。その成否を(ry
+	// taskをDBのTaskテーブルに追加
 	err = db.Create(&task).Error
 
 	// taskのポインタ と errを返す
 	return &task, err
 }
 
-// 関数 ChangeFinishedTaskの引数はuuid.UUID型のtaskIDで、戻り値はerror型である
+// あるID(引数)のtaskの完了状態を変更
 func ChangeFinishedTask(taskID uuid.UUID) error {
 
-	// DBのTaskテーブルからtaskIDと一致するidを探し、そのFinishedをtureにする(*3)
+	// DBのTaskテーブルからtaskIDと一致するidを探し，そのFinishedをtureにする
 	err := db.Model(&Task{}).Where("id = ?", taskID).Update("finished", true).Error
 	return err
 }
 
+// あるID(引数)のtaskを削除
 func DeleteTask(taskID uuid.UUID) error {
-	// DBのTaskテーブルからtaskIDと一致するidを探し、そのタスクを削除する
+
+	// DBのTaskテーブルからtaskIDと一致するidを探し，そのタスクを削除
 	err := db.Where("id = ?", taskID).Delete(&Task{}).Error
 	return err
 }
