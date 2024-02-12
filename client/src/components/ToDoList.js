@@ -17,18 +17,18 @@ function ToDoList() {
 
             // 配列の中身を確認し，完と未完に分類
             for (let i=0; i<res.data.length; i++) {
-                if (res.data[i].finished) {
+                if (res.data[i].Finished) { // finished->Finishedに修正
                     tempCompletedTodos = tempCompletedTodos.concat([
                         {
-                            id: res.data[i].id,
-                            name: res.data[i].name,
+                            id: res.data[i].ID, //id->IDに修正
+                            name: res.data[i].Name, // name->Nameに修正
                         },
                     ])
                 } else {
                     tempTodos = tempTodos.concat([
                         {
-                            id: res.data[i].id,
-                            name: res.data[i].name,
+                            id: res.data[i].ID, //id->IDに修正
+                            name: res.data[i].Name, // name->Nameに修正
                         },
                     ])
                 }
@@ -64,7 +64,7 @@ function ToDoList() {
     //タスクを未完から完了にする
     function handleComplete(index) {
         // PUTリクエストを送信(FalseをTrueにするだけなので送信データなし)
-        axios.put(`http://localhost:8000/api/tasks` + todos[index].id).then(() => {
+        axios.put(`http://localhost:8000/api/tasks/` + todos[index].id).then(() => {
 
             // リストの中身を更新
             handleGetTodos()
@@ -75,7 +75,7 @@ function ToDoList() {
     function handleDelete(index) {
 
         // DELETEリクエストを送信
-        axios.delete(`http://localhost:8000/api/tasks` + completedTodos[index].id).then(() => {
+        axios.delete(`http://localhost:8000/api/tasks/` + completedTodos[index].id).then(() => {
             
             // リストの中身を更新
             handleGetTodos()
@@ -110,7 +110,6 @@ function ToDoList() {
                 {todos.map((todo, index) => (
                     <li key={todo.id} className="li">
                         {todo.name}
-
                         {/* ボタン押下でhandleCompleteを実行 */}
                         <button onClick={() => handleComplete(index)}>完了する</button>
                     </li>
