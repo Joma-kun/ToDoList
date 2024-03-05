@@ -1,9 +1,11 @@
 ## 使用技術
+<p style="display: inline">
 <img src="https://img.shields.io/badge/Javascript-blue.svg?logo=javascript&style=flat">
 <img src="https://img.shields.io/badge/React-blue.svg?logo=react&style=flat">
 <img src="https://img.shields.io/badge/Go-red.svg?logo=go&style=flat">
 <img src="https://img.shields.io/badge/MySQL-yellow.svg?logo=mysql&style=flat">
 <img src="https://img.shields.io/badge/Dcoker-gray.svg?logo=docker&style=flat">
+</p>
 
 ## 起動方法
 - Dockerコンテナの起動
